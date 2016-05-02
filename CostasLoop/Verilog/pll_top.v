@@ -108,14 +108,34 @@ MyNco nco_inst (
 );
 
 
-wire [15:0] multi_out;
 
 /********************    Multiple 8 * 8   *************************/
+wire [15:0] multi_out;
 MyMulti_8_8 multi_inst (
   .clk(clk), // input clk
   .a(din), // input [7 : 0] a
   .b(nco_cosine), // input [7 : 0] b
   .p(multi_out) // output [15 : 0] p
 );
+
+
+/********************    FIR lpf   *************************/
+
+wire        lpf_sclr;
+wire        lpf_ce;
+wire [25:0] lpf_out;
+assign lpf_sclr = rst;
+assign lpf_ce   = ~rst && nco_rdy;
+assign lpf_nd   = ~rst && nco_rdy;
+
+lpf lpf_inst (
+	.sclr(lpf_sclr), // input sclr
+	.clk(clk), // input clk
+	.ce(lpf_ce), // input ce
+	.nd(lpf_nd), // input nd
+	.rfd(lpf_rfd), // output rfd
+	.rdy(lpf_rdy), // output rdy
+	.din(multi_out[14:0]), // input [14 : 0] din
+	.dout(lpf_out)); // output [25 : 0] dout
 
 endmodule // pll_top

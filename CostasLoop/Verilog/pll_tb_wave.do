@@ -5,7 +5,7 @@ add wave -noupdate /pll_tb/clk
 add wave -noupdate -format Analog-Step -height 74 -max 127.0 -min -127.0 -radix decimal /pll_tb/din
 add wave -noupdate -format Analog-Step -height 74 -max 127.0 -min -127.0 -radix decimal /pll_tb/din_doppler
 add wave -noupdate -format Analog-Step -height 74 -max 126.0 -min -126.0 -radix decimal /pll_tb/pll_inst/nco_cosine
-add wave -noupdate -format Analog-Step -height 74 -max 16002.000000000002 -min -180.0 -radix decimal /pll_tb/pll_inst/multi_out
+add wave -noupdate -format Analog-Step -height 74 -max 16002.0 -min -16002.0 -radix decimal /pll_tb/pll_inst/multi_out
 add wave -noupdate -format Analog-Step -height 74 -max 126.0 -min -126.0 -radix decimal /pll_tb/pll_inst/nco_sine
 add wave -noupdate /pll_tb/pll_inst/nco_rfd
 add wave -noupdate /pll_tb/pll_inst/nco_rdy
@@ -18,8 +18,14 @@ add wave -noupdate /pll_tb/pll_inst/nco_we
 add wave -noupdate /pll_tb/pll_inst/nco_ce
 add wave -noupdate /pll_tb/pll_inst/nco_sclr
 add wave -noupdate /pll_tb/pll_inst/nco_reg_se
+add wave -noupdate /pll_tb/pll_inst/lpf_sclr
+add wave -noupdate /pll_tb/pll_inst/lpf_ce
+add wave -noupdate /pll_tb/pll_inst/lpf_nd
+add wave -noupdate /pll_tb/pll_inst/lpf_rfd
+add wave -noupdate /pll_tb/pll_inst/lpf_rdy
+add wave -noupdate -format Analog-Step -height 74 -max 13642649.999999998 -min -14193740.0 -radix decimal /pll_tb/pll_inst/lpf_out
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1698063 ps} 0} {{Cursor 2} {313297007 ps} 0}
+WaveRestoreCursors {{Cursor 1} {968850 ps} 0} {{Cursor 2} {1781350 ps} 0}
 quietly wave cursor active 2
 configure wave -namecolwidth 188
 configure wave -valuecolwidth 100
@@ -35,4 +41,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {311588108 ps} {321846894 ps}
+WaveRestoreZoom {0 ps} {2564698 ps}

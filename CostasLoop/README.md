@@ -20,3 +20,4 @@
 1. 切换到 Verilog 目录，运行``vsim -do pll_tb.do``。即可观察到
     1. Matlab生成的两路信号（一路单一频率。一路叠加doppler），
     2. 通过编程 NCO IP core实现的本振信号。
+1. 对于 lpf 输入和输出的数据，可以打印出来，然后用matlab的 conv进行卷积计算。lpf的coefficientvector 可以在 \*.xco 文件中找到。
