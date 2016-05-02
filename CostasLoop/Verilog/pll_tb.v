@@ -64,7 +64,7 @@ pll_top pll_inst
 (
     .clk(clk),
     .rst(rst),
-    .din(din),
+    .din(din_doppler),
     .dout()
 );
 endmodule // simple_read_file_tb

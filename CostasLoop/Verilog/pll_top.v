@@ -108,4 +108,14 @@ MyNco nco_inst (
 );
 
 
+wire [15:0] multi_out;
+
+/********************    Multiple 8 * 8   *************************/
+MyMulti_8_8 multi_inst (
+  .clk(clk), // input clk
+  .a(din), // input [7 : 0] a
+  .b(nco_cosine), // input [7 : 0] b
+  .p(multi_out) // output [15 : 0] p
+);
+
 endmodule // pll_top
