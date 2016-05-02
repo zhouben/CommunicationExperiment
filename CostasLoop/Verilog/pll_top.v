@@ -42,7 +42,7 @@ localparam ns_4 = 3'd4;
 localparam ns_5 = 3'd5;
 localparam ns_6 = 3'd6;
 localparam FREQ_INITIAL     = 32'h2000_0000;
-localparam PHASE_INITIAL    = 32'hC000_0000;
+localparam PHASE_INITIAL    = 32'h9000_0000;
 
 /********************    Programming NCO   *************************/
 always @(posedge clk) begin

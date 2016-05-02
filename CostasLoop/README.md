@@ -20,4 +20,7 @@
 1. 切换到 Verilog 目录，运行``vsim -do pll_tb.do``。即可观察到
     1. Matlab生成的两路信号（一路单一频率。一路叠加doppler），
     2. 通过编程 NCO IP core实现的本振信号。
-1. 对于 lpf 输入和输出的数据，可以打印出来，然后用matlab的 conv进行卷积计算。lpf的coefficientvector 可以在 \*.xco 文件中找到。
+2. 对于 lpf 输入和输出的数据，可以打印出来，然后用matlab的 conv进行卷积计算。lpf的coefficientvector 可以在 \*.xco 文件中找到。
+3. 混频+LPF的观察
+    1. 通过调整 本振的初始相位，在同频但是相位不同时，可以发现混频器+LPF输出的误差信号的强度会跟初始相位有很大关系。基本成线性关系。
+    2. 不同频的情况下，误差信号按照频率之差振荡。基本符合预期。

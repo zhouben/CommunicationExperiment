@@ -5,7 +5,7 @@
 % 1. 单一频率信号，2MHz余弦信号
 % 2. 单一频率信号叠加多普勒频率效应。即
 %    按照时间，平均分为四个时间段，每一个时间段有5K个抽样点
-%    最初的频率是 2 MHz，此后的每一个阶段的频率增加分别是 +1K, +3K, -2K
+%    最初的频率是 2 MHz，此后的每一个阶段的频率增加分别是 +8K, +24K, -16K
 %
 % 两路信号生成的采样点数据按照 8bit 进行量化。输出到
 % ../data/single_freq.txt
@@ -23,6 +23,8 @@ t   = 0:1/Fs:(Len-1)/Fs;
 single_freq_out = cos(2 * pi * fc .* t);
 
 
+% 以 delta_phi_1 为例，每一个采样点增加的相位值是 1000/fc rad
+% 采样频率是 16Mhz，因此频率增量为 1000/fc / (1/16MHz) = 8000Hz
 delta_phi_0 = zeros(1, N);
 delta_phi_1 = linspace(1, N, N) * 1000 * 2 * pi / fc;
 delta_phi_2 = linspace(1, N, N) * 3000 * 2 * pi / fc;
