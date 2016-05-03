@@ -7,8 +7,10 @@ vlog -reportprogress 300 -work work \
          ./pll_tb.v         \
          ./MyNCO/MyNco.v    \
          MyMulti_8_8/MyMulti_8_8.v      \
-         Lpf_0_5/lpf_0_5.v               \
+         Lpf/lpf.v                      \
      $env(XILINX)/verilog/src/glbl.v 
+
+#         Lpf_0_5/lpf_0_5.v               \
 
 vsim -novopt  work.pll_tb  -L secureip \
      -L unisims_ver \

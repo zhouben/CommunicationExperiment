@@ -123,7 +123,7 @@ MyMulti_8_8 multi_inst (
 
 wire        lpf_sclr;
 wire        lpf_ce;
-wire [25:0] lpf_out;
+wire [27:0] lpf_out;
 assign lpf_sclr = rst;
 assign lpf_ce   = ~rst && nco_rdy;
 assign lpf_nd   = ~rst && nco_rdy;
