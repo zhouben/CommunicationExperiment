@@ -65,7 +65,7 @@ initial begin
     while ( print_cnt < 100) begin
         @(posedge clk);
         if (pll_inst.lpf_ce) begin
-            $display("[%t] : multi_out %d  lpf_out %d", $realtime, $signed(pll_inst.multi_out), $signed(pll_inst.lpf_out));
+            $display("[%t] : multi_out %d  lpf_out %d", $realtime, $signed(pll_inst.multi_i_out), $signed(pll_inst.lpf_i_out));
             print_cnt = print_cnt + 1;
         end
         #1;

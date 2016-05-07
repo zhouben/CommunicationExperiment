@@ -26,9 +26,9 @@ single_freq_out = cos(2 * pi * fc .* t);
 % 以 delta_phi_1 为例，每一个采样点增加的相位值是 1000/fc rad
 % 采样频率是 16Mhz，因此频率增量为 1000/fc / (1/16MHz) = 8000Hz
 delta_phi_0 = zeros(1, N);
-delta_phi_1 = linspace(1, N, N) * 1000 * 2 * pi / fc;
-delta_phi_2 = linspace(1, N, N) * 3000 * 2 * pi / fc;
-delta_phi_3 = linspace(N, 1, N) * 2000 * 2 * pi / fc;
+delta_phi_1 = linspace(1, N, N) * 100 * 2 * 2 * pi / fc;
+delta_phi_2 = linspace(1, N, N) * 150 * 2 * 2 * pi / fc;
+delta_phi_3 = linspace(N, 1, N) * 100 * 2 * 2 * pi / fc;
 delta_phi = [ delta_phi_0, delta_phi_1, delta_phi_2, delta_phi_3 ];
 single_freq_doppler = cos(2 * pi * fc .* t + delta_phi);
 

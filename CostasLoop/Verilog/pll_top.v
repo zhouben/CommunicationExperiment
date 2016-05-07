@@ -11,6 +11,13 @@ module pll_top
 input [7:0] din;
 output [7:0] dout;
 
+
+
+
+wire [27:0] loop_filter_input;
+wire [31:0] loop_filter_output;
+wire        loop_filter_output_valid;
+
 reg     rst_d;
 always @(posedge clk) begin
     rst_d <= rst;
@@ -41,6 +48,7 @@ localparam ns_3 = 3'd3;
 localparam ns_4 = 3'd4;
 localparam ns_5 = 3'd5;
 localparam ns_6 = 3'd6;
+localparam ns_7 = 3'd7;
 localparam FREQ_INITIAL     = 32'h2000_0000;
 localparam PHASE_INITIAL    = 32'h9000_0000;
 
@@ -92,14 +100,18 @@ always @(*) begin
     endcase
 end
 
+wire nco_we_input;
+wire [31:0] nco_data_input;
+assign nco_we_input = (nco_state == ns_6) ? loop_filter_output_valid : nco_we;
+assign nco_data_input = (nco_state == ns_6) ? loop_filter_output : nco_data;
 
 MyNco nco_inst (
   .reg_select(nco_reg_se), // input reg_select
   .ce(nco_ce), // input ce
   .clk(clk), // input clk
   .sclr(nco_sclr), // input sclr
-  .we(nco_we), // input we
-  .data(nco_data), // input [31 : 0] data
+  .we(nco_we_input), // input we
+  .data(nco_data_input), // input [31 : 0] data
   .rdy(nco_rdy), // output rdy
   .rfd(nco_rfd), // output rfd
   .cosine(nco_cosine), // output [7 : 0] cosine
@@ -109,13 +121,20 @@ MyNco nco_inst (
 
 
 
-/********************    Multiple 8 * 8   *************************/
-wire [15:0] multi_out;
-MyMulti_8_8 multi_inst (
+/*****************************     Multiple 8 * 8 ****************************/
+wire [15:0] multi_i_out;
+wire [15:0] multi_q_out;
+MyMulti_8_8 multi_i_inst (
+  .clk(clk), // input clk
+  .a(din), // input [7 : 0] a
+  .b(nco_sine), // input [7 : 0] b
+  .p(multi_i_out) // output [15 : 0] p
+);
+MyMulti_8_8 multi_q_inst (
   .clk(clk), // input clk
   .a(din), // input [7 : 0] a
   .b(nco_cosine), // input [7 : 0] b
-  .p(multi_out) // output [15 : 0] p
+  .p(multi_q_out) // output [15 : 0] p
 );
 
 
@@ -123,19 +142,53 @@ MyMulti_8_8 multi_inst (
 
 wire        lpf_sclr;
 wire        lpf_ce;
-wire [27:0] lpf_out;
+wire signed [27:0] lpf_i_out;
+wire signed [27:0] lpf_q_out;
 assign lpf_sclr = rst;
 assign lpf_ce   = ~rst && nco_rdy;
 assign lpf_nd   = ~rst && nco_rdy;
 
-lpf lpf_inst (
+lpf lpf_i_inst (
 	.sclr(lpf_sclr), // input sclr
 	.clk(clk), // input clk
 	.ce(lpf_ce), // input ce
 	.nd(lpf_nd), // input nd
 	.rfd(lpf_rfd), // output rfd
 	.rdy(lpf_rdy), // output rdy
-	.din(multi_out[14:0]), // input [14 : 0] din
-	.dout(lpf_out)); // output [25 : 0] dout
+	.din(multi_i_out[14:0]), // input [14 : 0] din
+	.dout(lpf_i_out)); // output [25 : 0] dout
+
+lpf lpf_q_inst (
+	.sclr(lpf_sclr), // input sclr
+	.clk(clk), // input clk
+	.ce(lpf_ce), // input ce
+	.nd(lpf_nd), // input nd
+	.rfd(lpf_rfd), // output rfd
+	.rdy(lpf_rdy), // output rdy
+	.din(multi_q_out[14:0]), // input [14 : 0] din
+	.dout(lpf_q_out)); // output [25 : 0] dout
+
+/******************************    sign detector   ***************************/
+assign loop_filter_input = lpf_i_out[27] ? -lpf_q_out : lpf_q_out;
+
+reg [7:0] cnt;
+always @(posedge clk) begin
+    if (rst) cnt <= 6'b0;
+    else begin
+        if (cnt != 8'b1111_1111) cnt <= cnt + 1;
+    end
+end
+/******************************  loop filter (IIR)  **************************/
+loop_filter #(
+    .START_FREQ(32'h2003_0000)
+) lf_inst (
+    .clk(clk),
+    .rst(rst),
+    //.ce(nco_rdy),
+    .ce(cnt == 8'hFF),
+    .din(loop_filter_input),
+    .data_valid(loop_filter_output_valid),
+    .dout(loop_filter_output)
+);
 
 endmodule // pll_top
