@@ -16,6 +16,7 @@ module loop_filter #
 localparam PERIOD = 13;
 reg signed [31:0]  y;
 reg signed [27:0]  sum;
+reg signed [27:0]  df;
 reg [4:0]   cnt;
 
 assign dout = y;
@@ -34,10 +35,11 @@ always @(posedge clk) begin
                 cnt <= cnt + 1;
         end
         if (cnt == PERIOD - 2) begin
-            sum = sum + din >>> 13;
+            sum <= sum + (din >>> 13);
         end
         if (cnt == PERIOD - 1) begin
-            y = ((sum[27]) ? {4'b1111, sum } : sum) + ((din[27]) ? {10'h3_FF_FF, din[27:6]} : din[27:6]) + START_FREQ;
+            df <= ((sum[27]) ? {4'b1111, sum } : sum) + ((din[27]) ? {10'h3_FF_FF, din[27:6]} : din[27:6]);
+            y <= ((sum[27]) ? {4'b1111, sum } : sum) + ((din[27]) ? {10'h3_FF_FF, din[27:6]} : din[27:6]) + START_FREQ;
         end
     end
 end

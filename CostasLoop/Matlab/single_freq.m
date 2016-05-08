@@ -19,17 +19,39 @@ Len = N * 4;
 Fs  = 16*10^6;      %采样速率为16MHz
 fc  = 2*10^6;   %载波频率为2MHz
 
+% 信号，符号率 1Mbps
+Rb  = 1e6;
+% 信号码元的总数，由采样点总数，采样率和信号速率决定。
+x_n = Len / (Fs/Rb);
+x = m_seq([ 0 0 1 0 1] );
+% 0, 1码 转化为 1, -1码
+x = x * -2 + 1;
+x = repmat(x, 1, ceil( x_n / length(x)));
+x = x(1:x_n);
+n_T = [-2 2];
+rate = Fs/Rb;
+T = 1;
+a = 0.8;
+shape_b = rcosfir(a, n_T, rate, T);
+x = filter(shape_b, 1, x);
+
+% 生成载波信号
 t   = 0:1/Fs:(Len-1)/Fs;
 single_freq_out = cos(2 * pi * fc .* t);
 
+% 带有信号的调制后的频率
+signal_demod_out = single_freq_out .* (rectpulse(x, Fs/Rb));
 
 % 以 delta_phi_1 为例，每一个采样点增加的相位值是 1000/fc rad
-% 采样频率是 16Mhz，因此频率增量为 1000/fc / (1/16MHz) = 8000Hz
 delta_phi_0 = zeros(1, N);
+% 采样频率是 16Mhz，因此这个N时间段的频率增量为 (100 * 2 /fc) / (1/16MHz) = 1600Hz
 delta_phi_1 = linspace(1, N, N) * 100 * 2 * 2 * pi / fc;
+% 采样频率是 16Mhz，因此这个N时间段的频率增量为 (150 * 2 /fc) / (1/16MHz) = 2400Hz
 delta_phi_2 = linspace(1, N, N) * 150 * 2 * 2 * pi / fc;
+% 采样频率是 16Mhz，因此这个N时间段的频率增量为 (-100 * 2 /fc) / (1/16MHz) = -1600Hz
 delta_phi_3 = linspace(N, 1, N) * 100 * 2 * 2 * pi / fc;
 delta_phi = [ delta_phi_0, delta_phi_1, delta_phi_2, delta_phi_3 ];
+% 通过叠加载波频率，4个时间段的频率分别是 2M, 2.0016M, 2.0024M, 1.9984M
 single_freq_doppler = cos(2 * pi * fc .* t + delta_phi);
 
 
@@ -60,8 +82,6 @@ end
 %fprintf(fid,';'); 
 fclose(fid);
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % create file for doppler signal
 Q=8;
 f_s = single_freq_doppler /max(abs(single_freq_doppler));%归一化处理
@@ -83,3 +103,23 @@ end
 %fprintf(fid,';'); 
 fclose(fid);
 
+% 生成码元信息调制后的数据文件
+%8比特量化中频采样仿真数据，并写入外部文本文件中
+Q   = 8;
+f_s = signal_demod_out / max(abs(signal_demod_out));%归一化处理
+Q_s = round(f_s * (2 ^ (Q - 1) - 1));
+fid=fopen('../data/signal_demod_out.txt','w');
+for k = 1:length(Q_s)
+    B_s = dec2bin(Q_s(k)+(Q_s(k)<0)*2^Q,Q);
+    k;
+    for j = 1:Q
+       if B_s(j) == '1'
+           tb = 1;
+       else
+           tb = 0;
+       end
+       fprintf(fid,'%d',tb);  
+    end
+    fprintf(fid,'\r\n');
+end
+fclose(fid);

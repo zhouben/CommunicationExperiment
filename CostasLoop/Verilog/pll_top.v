@@ -180,12 +180,12 @@ always @(posedge clk) begin
 end
 /******************************  loop filter (IIR)  **************************/
 loop_filter #(
-    .START_FREQ(32'h2003_0000)
+    .START_FREQ(32'h2000_0000)
 ) lf_inst (
     .clk(clk),
     .rst(rst),
-    //.ce(nco_rdy),
-    .ce(cnt == 8'hFF),
+    .ce(nco_rdy),
+    //.ce(cnt == 8'hFF),
     .din(loop_filter_input),
     .data_valid(loop_filter_output_valid),
     .dout(loop_filter_output)

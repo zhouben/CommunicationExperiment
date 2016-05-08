@@ -1,11 +1,13 @@
 onerror {resume}
+quietly virtual signal -install /pll_tb/pll_inst { /pll_tb/pll_inst/loop_filter_input[27:6]} x
+quietly virtual signal -install /pll_tb/pll_inst { /pll_tb/pll_inst/loop_filter_input[27:13]} xx
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /pll_tb/rst
 add wave -noupdate /pll_tb/clk
+add wave -noupdate -radix decimal /pll_tb/pll_inst/din
 add wave -noupdate -format Analog-Step -height 74 -max 127.0 -min -127.0 -radix decimal /pll_tb/din
-add wave -noupdate -format Analog-Step -height 74 -max 127.0 -min -127.0 -radix decimal /pll_tb/din_doppler
-add wave -noupdate -format Analog-Step -height 74 -max 126.0 -min -126.0 -radix decimal /pll_tb/pll_inst/nco_cosine
 add wave -noupdate -format Analog-Step -height 74 -max 126.0 -min -126.0 -radix decimal /pll_tb/pll_inst/nco_sine
+add wave -noupdate -format Analog-Step -height 74 -max 126.0 -min -126.0 -radix decimal /pll_tb/pll_inst/nco_cosine
 add wave -noupdate -format Analog-Step -height 74 -max 16002.0 -min -16002.0 -radix decimal /pll_tb/pll_inst/multi_i_out
 add wave -noupdate -format Analog-Step -height 74 -max 16002.0 -min -16002.0 -radix decimal /pll_tb/pll_inst/multi_q_out
 add wave -noupdate /pll_tb/pll_inst/nco_rfd
@@ -27,16 +29,18 @@ add wave -noupdate /pll_tb/pll_inst/lpf_nd
 add wave -noupdate /pll_tb/pll_inst/lpf_rfd
 add wave -noupdate /pll_tb/pll_inst/lpf_rdy
 add wave -noupdate /pll_tb/pll_inst/lf_inst/data_valid
-add wave -noupdate -format Analog-Step -height 74 -max 537073320.0 -min 536725857.0 -radix hexadecimal /pll_tb/pll_inst/lf_inst/dout
+add wave -noupdate -format Analog-Step -height 74 -max 537073000.0 -min 536726000.0 -radix hexadecimal /pll_tb/pll_inst/lf_inst/dout
 add wave -noupdate -format Analog-Step -height 74 -max 553000000.0 -min 536000000.0 -radix hexadecimal /pll_tb/pll_inst/lf_inst/y
 add wave -noupdate -format Analog-Step -height 74 -max 2551850.0 -radix decimal /pll_tb/pll_inst/lf_inst/sum
 add wave -noupdate -radix hexadecimal /pll_tb/pll_inst/lf_inst/cnt
-add wave -noupdate -format Analog-Step -height 74 -max 53951399.999999993 -min -53787200.0 -radix decimal /pll_tb/pll_inst/lpf_i_out
-add wave -noupdate -format Analog-Step -height 74 -max 53888199.999999993 -min -53747200.0 -radix decimal /pll_tb/pll_inst/lpf_q_out
-add wave -noupdate -format Analog-Step -height 74 -max 53888200.0 -min -53888200.0 -radix decimal /pll_tb/pll_inst/loop_filter_input
+add wave -noupdate -max 53951399.999999993 -min -53787200.0 -radix decimal /pll_tb/pll_inst/lpf_i_out
+add wave -noupdate -max 53888199.999999993 -min -53747200.0 -radix decimal /pll_tb/pll_inst/lpf_q_out
+add wave -noupdate -label {x[n](-6)} -radix decimal /pll_tb/pll_inst/x
+add wave -noupdate -label {x[n-1](-13)} -radix decimal /pll_tb/pll_inst/xx
+add wave -noupdate -max 53888200.0 -min -53888200.0 -radix decimal -childformat {{{/pll_tb/pll_inst/loop_filter_input[27]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[26]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[25]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[24]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[23]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[22]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[21]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[20]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[19]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[18]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[17]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[16]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[15]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[14]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[13]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[12]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[11]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[10]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[9]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[8]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[7]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[6]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[5]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[4]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[3]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[2]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[1]} -radix decimal} {{/pll_tb/pll_inst/loop_filter_input[0]} -radix decimal}} -subitemconfig {{/pll_tb/pll_inst/loop_filter_input[27]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[26]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[25]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[24]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[23]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[22]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[21]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[20]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[19]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[18]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[17]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[16]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[15]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[14]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[13]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[12]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[11]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[10]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[9]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[8]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[7]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[6]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[5]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[4]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[3]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[2]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[1]} {-radix decimal} {/pll_tb/pll_inst/loop_filter_input[0]} {-radix decimal}} /pll_tb/pll_inst/loop_filter_input
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {217031250 ps} 0} {{Cursor 2} {1159281250 ps} 0}
-quietly wave cursor active 1
+WaveRestoreCursors {{Cursor 1} {2656250 ps} 1} {{Cursor 2} {2568060 ps} 0}
+quietly wave cursor active 2
 configure wave -namecolwidth 208
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -51,4 +55,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {505214060 ps}
+WaveRestoreZoom {2335660 ps} {2976840 ps}
