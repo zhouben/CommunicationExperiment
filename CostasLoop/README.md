@@ -29,3 +29,7 @@
     1. Matlab 目录下的 pll\_lpf.m 可以生成 长度为38的滤波器。过渡带为 0.2121MHz ~ 1MHz。采样频率依旧是 16MHz。该程序会在 Data 目录下生成 locklpf.coe 文件。
     2. Xilinx实现FIR滤波器，采用上一步的coe文件，生成 Verilog/Lpf 下的三个文件
     3. 修改pll\_tb.do 等文件，采用 Lpf下的滤波器
+
+5. 添加Verilog\_8MHz项目。完成8MHz采样下2MHz载波频率，1Mbps的码元速率调制的信号的costas环路的实现。
+    1. 在 Data目录下的 Dpsk\_signal\_8M.txt和 \_InitialPhase.txt两个文件基本相同，只是相位有偏差。costas环路锁相时表现的波形就有很大差别。
+    2. 相比原有 Verilog 目录下的16MHz的项目，8MHz的项目的Fir，NCO，loopfilter等均重新设计。
